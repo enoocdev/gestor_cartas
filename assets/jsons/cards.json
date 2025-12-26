@@ -1,0 +1,44 @@
+[
+    {
+        "codigo": 1,
+        "nombre": "Underground Sea",
+        "calidad": "Excelent",
+        "coleccion": "Revised",
+        "precio": 600.0
+    },
+    {
+        "codigo": 2,
+        "nombre": "Yawgmoth's Will",
+        "calidad": "Played",
+        "coleccion": "Saga de Urza",
+        "precio": 90.0
+    },
+    {
+        "codigo": 3,
+        "nombre": "Mox Diamond",
+        "calidad": "Excelent",
+        "coleccion": "Portal",
+        "precio": 500.0
+    },
+    {
+        "codigo": 4,
+        "nombre": "Volcanic Island",
+        "calidad": "Excelent",
+        "coleccion": "Revised",
+        "precio": 580.0
+    },
+    {
+        "codigo": 5,
+        "nombre": "Black Lotus",
+        "calidad": "Poor",
+        "coleccion": "Alpha",
+        "precio": 12500.0
+    },
+    {
+        "codigo": 6,
+        "nombre": "Force of Will",
+        "calidad": "Good",
+        "coleccion": "Alliances",
+        "precio": 85.0
+    }
+]

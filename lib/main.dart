@@ -29,7 +29,8 @@ class _MyAppState extends State<MyApp> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: _theme,
-      home: MainLayout(),
+      home: MainLayout(changeTheme: cambiarTema),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
