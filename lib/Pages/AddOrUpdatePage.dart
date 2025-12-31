@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 // Importamos tu modelo con un alias para evitar conflictos con el Widget Card
+// se usa el alias model para diferenciar claramente el objeto de datos del widget visual
 import 'package:gestor_cartas/Logic/Card.dart' as model;
 
 class AddOrUpdatePage extends StatefulWidget {
@@ -13,9 +14,11 @@ class AddOrUpdatePage extends StatefulWidget {
 
 class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
   // Clave para validar el formulario
+  // sirve para comprobar que todos los campos cumplen las reglas antes de guardar
   final _formKey = GlobalKey<FormState>();
 
   // Controladores para los campos de texto
+  // permiten leer y escribir texto dentro de los inputs
   final TextEditingController _nombreCtrl = TextEditingController();
   final TextEditingController _coleccionCtrl = TextEditingController();
   final TextEditingController _precioCtrl = TextEditingController();
@@ -24,7 +27,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
   // Variable para el selector de estado
   String? _selectedCondition;
 
-  // Lista de estados posibles
+  // Lista de estados
   final List<String> _conditions = [
     'Mint',
     'Near Mint',
@@ -39,11 +42,14 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
   void initState() {
     super.initState();
 
+    // si la carta existe significa que estamos en modo edicion
     if (widget.card != null) {
+      // cargamos los datos de la carta en los controladores para que aparezcan en pantalla
       _nombreCtrl.text = widget.card!.nombre;
       _coleccionCtrl.text = widget.card!.coleccion;
       _precioCtrl.text = widget.card!.precio.toString();
 
+      // verificamos que la calidad de la carta este en nuestra lista permitida
       if (_conditions.contains(widget.card!.calidad)) {
         _selectedCondition = widget.card!.calidad;
       }
@@ -52,6 +58,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
 
   @override
   void dispose() {
+    // es importante liberar los controladores para evitar fugas de memoria
     _nombreCtrl.dispose();
     _coleccionCtrl.dispose();
     _precioCtrl.dispose();
@@ -61,10 +68,14 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
 
   // Simulación de guardar
   void _saveCard() {
+    // ejecutamos la validacion de todos los campos del formulario
     if (_formKey.currentState!.validate()) {
+      // determinamos el mensaje segun si estamos creando o editando
       final String msg = widget.card == null
           ? "Carta creada"
           : "Carta actualizada";
+
+      // mostramos un aviso visual al usuario
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
       Navigator.pop(context); // Volver atrás
@@ -79,11 +90,12 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
         backgroundColor: Colors.red,
       ),
     );
-    Navigator.pop(context);
+    Navigator.pop(context); // regresamos a la pantalla anterior tras borrar
   }
 
   @override
   Widget build(BuildContext context) {
+    // variable booleana para saber si el formulario es de edicion o creacion
     final bool isEditing = widget.card != null;
     final theme = Theme.of(context);
 
@@ -96,7 +108,8 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: _formKey,
+                key:
+                    _formKey, // vinculamos el formulario con nuestra clave global
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -108,6 +121,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                     ),
                     const SizedBox(height: 20),
 
+                    // campo para el nombre con validacion de texto vacio
                     _buildTextField(
                       controller: _nombreCtrl,
                       label: "Nombre de la carta",
@@ -117,6 +131,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                     ),
                     const SizedBox(height: 15),
 
+                    // campo para el set o coleccion
                     _buildTextField(
                       controller: _coleccionCtrl,
                       label: "Colección / Set",
@@ -129,7 +144,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Precio
+                        // Precio con teclado numerico habilitado
                         Expanded(
                           flex: 1,
                           child: _buildTextField(
@@ -148,10 +163,12 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                         ),
                         const SizedBox(width: 15),
 
+                        // selector desplegable para la calidad de la carta
                         Expanded(
                           flex: 2,
                           child: DropdownButtonFormField<String>(
-                            initialValue: _selectedCondition,
+                            initialValue:
+                                _selectedCondition, // estado iniical del selector
                             decoration: _inputDecoration(
                               "Condición",
                               Icons.star,
@@ -177,7 +194,8 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
 
                     const SizedBox(height: 40),
 
-                    // 5. BOTÓN PRINCIPAL (CREAR / ACTUALIZAR)
+                    // Boton principal
+                    // cambia su icono y texto dinamicamente segun la accion
                     ElevatedButton.icon(
                       onPressed: _saveCard,
                       icon: Icon(isEditing ? Icons.save : Icons.add),
@@ -192,7 +210,8 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
 
                     const SizedBox(height: 20),
 
-                    // 6. BOTÓN BORRAR (Solo si estamos editando)
+                    // Boton de borrar
+                    // este boton solo aparece si el objeto card no es nulo
                     if (isEditing)
                       OutlinedButton.icon(
                         onPressed: _deleteCard,
@@ -217,9 +236,8 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
     );
   }
 
-  // --- Helpers para simplificar el código visual ---
-
-  // Método para crear Input Decoration estilo "Dark Mode"
+  // Método para crear inputs
+  // centraliza el estilo de los campos para que todos se vean iguales
   InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
@@ -228,7 +246,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
     );
   }
 
-  // Widget genérico para campos de texto
+  // reduce la repeticion de codigo al crear los textformfield de la vista
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,

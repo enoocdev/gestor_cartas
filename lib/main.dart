@@ -14,10 +14,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // Defino el estado inicial usa eñ del sistema por defecto
   ThemeMode _theme = ThemeMode.system;
 
-  cambiarTema() {
+  // Funcion para alternar entre temas
+  swapTheme() {
     setState(() {
+      // Si es dark pasa a light si no pasa a dark
       _theme = _theme == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
     });
   }
@@ -26,10 +29,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Gestor de cartas",
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: _theme,
-      home: MainLayout(changeTheme: cambiarTema),
+      theme: AppTheme.lightTheme, // Estilo claro de la pagina
+      darkTheme: AppTheme.darkTheme, // Estilo oscuro de la pagiina
+      themeMode: _theme, // Controla que tema se muestra actualmente
+      // Pasamos la función swapTheme a la página principal para poder usarla alli
+      home: MainLayout(changeTheme: swapTheme),
       debugShowCheckedModeBanner: false,
     );
   }

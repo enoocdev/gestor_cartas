@@ -1,41 +1,45 @@
 import 'package:flutter/material.dart';
 import '../Logic/CardList.dart';
 
+// Este widget muestra una tarjeta con el resumen economico de toda la coleccion
 class ColeccionCard extends StatelessWidget {
   const ColeccionCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 1. ACCEDEMOS AL SINGLETON
+    // Se obtiene la lista global de cartas para realizar los calculos
     final lista = Cardlist().cards;
 
+    // Se inicializa el sumatorio del valor de las cartas
     double valorTotal = 0;
     if (lista.isNotEmpty) {
+      // Se usa fold para recorrer la lista y acumular la suma de los precios de forma eficiente
       valorTotal = lista.fold(0, (sum, item) => sum + item.precio);
     }
 
-    // Estilos del tema actual
+    // Estilos del tema actual para que los colores se adapten si es modo claro u oscuro
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return Card(
-      elevation: 9,
+      elevation: 9, // Sombra pronunciada para darle profundidad a la tarjeta
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      clipBehavior: Clip.antiAlias, //para que no se salga del card el icono
+      clipBehavior: Clip.antiAlias, // para que no se salga del card el icono
       child: Stack(
+        // Se usa un stack para colocar elementos uno encima de otro
         children: [
+          // Icono decorativo de fondo posicionado en la esquina inferior derecha
           Positioned(
             right: -20,
             bottom: -20,
             child: Opacity(
-              opacity: 0.2,
-              child: Icon(
-                Icons.monetization_on_outlined,
-                size: 140, // GIGANTE
-              ),
+              opacity:
+                  0.2, // Opacidad baja para que no moleste a la lectura del texto
+              child: Icon(Icons.monetization_on_outlined, size: 140),
             ),
           ),
 
+          // Contenedor principal con la informacion de la coleccion
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
@@ -45,10 +49,11 @@ class ColeccionCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
+                    // Icono de cartera con el color primario del tema
                     Icon(Icons.wallet, color: colorScheme.primary, size: 20),
                     const SizedBox(width: 8),
                     Text(
-                      "Valor de la colección",
+                      "Valor de la coleccion",
                       style: textTheme.titleMedium?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -58,6 +63,7 @@ class ColeccionCard extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
+                // Muestra el precio total calculado formateado a dos decimales
                 Text(
                   "${valorTotal.toStringAsFixed(2)} €",
                   style: textTheme.headlineLarge?.copyWith(
@@ -67,15 +73,17 @@ class ColeccionCard extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 15),
-                const Divider(),
+                const Divider(), // Linea para separar el valor del conteo total
                 const SizedBox(height: 10),
 
                 Row(
                   children: [
+                    // Icono para el contador de cartas
                     Icon(Icons.style, color: colorScheme.secondary, size: 20),
                     const SizedBox(width: 8),
+                    // Indica cuantas cartas hay almacenadas actualmente
                     Text(
-                      "Número de cartas: ${lista.length}",
+                      "Numero de cartas: ${lista.length}",
                       style: textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),

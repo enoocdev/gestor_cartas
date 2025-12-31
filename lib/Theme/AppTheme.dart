@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static const Color seedColor = Color.fromARGB(255, 255, 53, 2);
 
-  // ===========================================================================
   // TEMA CLARO (LIGHT)
-  // ===========================================================================
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
@@ -70,9 +68,7 @@ class AppTheme {
     );
   }
 
-  // ===========================================================================
-  // 🌙 TEMA OSCURO (DARK)
-  // ===========================================================================
+  // TEMA OSCURO (DARK)
   static ThemeData get darkTheme {
     // Generamos el esquema oscuro
     final ColorScheme colorScheme = ColorScheme.fromSeed(
