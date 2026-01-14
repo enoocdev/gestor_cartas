@@ -40,6 +40,15 @@ class Cardlist {
     return cards.removeWhere((a) => a.codigo == cod);
   }
 
+  updateCard(Card card) {
+    Card c = searchCard(code: card.codigo)[0];
+
+    c.calidad = card.calidad;
+    c.coleccion = card.coleccion;
+    c.nombre = card.nombre;
+    c.precio = card.precio;
+  }
+
   // Buscador genérico. Permite filtrar por cualquier campo que no sea nulo.
   searchCard({
     int? code,

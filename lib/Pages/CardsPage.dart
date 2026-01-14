@@ -15,17 +15,22 @@ class _CardsPageState extends State<CardsPage> {
   // Referencia a la logica centralizada de las cartas
   final Cardlist _cardlist = Cardlist();
   // Variable para guardar la lista que se va a mostrar segun el filtro
-  late List cards = _cardlist.cards;
+  late List _cards = _cardlist.cards;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // Boton circular para ir a la pantalla de agregar una nueva carta
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddOrUpdatePage()),
-        ),
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddOrUpdatePage()),
+          );
+          setState(() {
+            _cards = [...Cardlist().cards];
+          });
+        },
         child: const Icon(Icons.add),
       ),
       body: SingleChildScrollView(
@@ -69,7 +74,7 @@ class _CardsPageState extends State<CardsPage> {
                             onChanged: (text) {
                               setState(() {
                                 // Se llama al buscador de la logica y se refresca la vista
-                                cards = _cardlist.searchCard(nombre: text);
+                                _cards = _cardlist.searchCard(nombre: text);
                               });
                             },
                           ),
@@ -79,7 +84,7 @@ class _CardsPageState extends State<CardsPage> {
                   ),
                   const Divider(), // Linea divisoria para separar la busqueda de la lista
                   // Se le pasa la lista filtrada al widget que dibuja las cartas
-                  CardsList(cards: cards),
+                  CardsList(cards: _cards),
                 ],
               ),
             ),

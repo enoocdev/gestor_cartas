@@ -31,6 +31,13 @@ class _MainPageState extends State<MainPage> {
                 children: [
                   // Widget personalizado que muestra informacion general de la coleccion
                   ColeccionCard(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Mejores Cartas",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
                   // Widget que muestra las mejores cartas de la coleccion
                   ColeccionTopCards(),
                 ],

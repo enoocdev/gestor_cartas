@@ -1,13 +1,42 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/Pages/AddOrUpdatePage.dart';
 import 'package:gestor_cartas/widgets/ConditionChip.dart';
 
 // Este widget se encarga de dibujar la lista de cartas de forma individual
-class CardsList extends StatelessWidget {
+class CardsList extends StatefulWidget {
   const CardsList({super.key, required this.cards});
 
   // Recibe la lista de cartas que tiene que mostrar por pantalla
   final List<dynamic> cards;
+
+  @override
+  State<CardsList> createState() => _CardsListState();
+}
+
+class _CardsListState extends State<CardsList> {
+  // Copia local de la lista de cartas; el widget trabajará sobre esta variable
+  late List<dynamic> _cards;
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializamos la lista local con una copia de la pasada por el padre
+    _cards = [...widget.cards];
+  }
+
+  @override
+  void didUpdateWidget(covariant CardsList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Si el padre pasó una lista distinta (por referencia), actualizamos la copia local
+    if (!identical(oldWidget.cards, widget.cards)) {
+      setState(() {
+        _cards = List<dynamic>.from(widget.cards);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +44,11 @@ class CardsList extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true, // Hace que la lista ocupe solo el espacio de sus hijos
       physics:
-          NeverScrollableScrollPhysics(), // Delega el scroll al widget padre para evitar conflictos
-      itemCount: cards.length,
+          const NeverScrollableScrollPhysics(), // Delega el scroll al widget padre para evitar conflictos
+      itemCount: _cards.length,
       itemBuilder: (context, index) {
         final card =
-            cards[index]; // Se extrae la informacion de la carta actual por su indice
+            _cards[index]; // Se extrae la informacion de la carta actual por su indice
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
           child: ListTile(
@@ -38,12 +67,14 @@ class CardsList extends StatelessWidget {
                 // El nombre ocupa todo el espacio disponible a la izquierda
                 Expanded(child: Text(card.nombre)),
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                   child: Text(
                     // Se formatea el precio para que siempre muestre dos decimales
                     "${card.precio.toStringAsFixed(2)} €",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ],
@@ -53,7 +84,10 @@ class CardsList extends StatelessWidget {
               children: [
                 // Texto pequeño para identificar a que coleccion pertenece la carta
                 Expanded(
-                  child: Text(card.coleccion, style: TextStyle(fontSize: 12)),
+                  child: Text(
+                    card.coleccion,
+                    style: const TextStyle(fontSize: 12),
+                  ),
                 ),
                 // Widget que muestra una etiqueta de color segun el estado de la carta
                 ConditionChip(condition: card.calidad),
@@ -61,15 +95,21 @@ class CardsList extends StatelessWidget {
             ),
 
             // Icono de lapiz para indicar visualmente que se puede editar
-            trailing: Icon(Icons.edit),
+            trailing: const Icon(Icons.edit),
 
             // Al tocar la carta se abre la pantalla de edicion pasando los datos actuales
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddOrUpdatePage(card: card),
-              ),
-            ),
+            onTap: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddOrUpdatePage(card: card),
+                ),
+              );
+
+              setState(() {
+                _cards = [...Cardlist().cards];
+              });
+            },
           ),
         );
       },

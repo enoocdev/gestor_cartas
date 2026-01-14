@@ -3,6 +3,7 @@ import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/Pages/CardsPage.dart';
 import 'package:gestor_cartas/Pages/MainPage.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:gestor_cartas/constants.dart';
 
 /// Widget que define la estructura principal de la interfaz
 /// Utiliza un StatefulWidget porque maneja el estado de la navegación y la carga de datos
@@ -33,7 +34,7 @@ class _MainLayoutState extends State<MainLayout> {
     });
 
     // Llamada al método de la lógica para leer los datos del JSON
-    await _cardlist.readFromJson("assets/jsons/cards.json");
+    await _cardlist.readFromJson(pathJson);
 
     setState(() {
       _loading = false;

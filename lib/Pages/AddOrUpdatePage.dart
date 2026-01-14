@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 // Importamos tu modelo con un alias para evitar conflictos con el Widget Card
 // se usa el alias model para diferenciar claramente el objeto de datos del widget visual
 import 'package:gestor_cartas/Logic/Card.dart' as model;
+import 'package:gestor_cartas/Logic/CardList.dart';
+import 'package:gestor_cartas/constants.dart';
 
 class AddOrUpdatePage extends StatefulWidget {
   final model.Card? card; // Recibe la carta o null
@@ -23,9 +27,11 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
   final TextEditingController _coleccionCtrl = TextEditingController();
   final TextEditingController _precioCtrl = TextEditingController();
   final TextEditingController _imagenCtrl = TextEditingController();
-
+  int _cardId = 0;
   // Variable para el selector de estado
   String? _selectedCondition;
+  // Variable para la imagen seleccionada
+  String? _selectedImage;
 
   // Lista de estados
   final List<String> _conditions = [
@@ -53,6 +59,8 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
       if (_conditions.contains(widget.card!.calidad)) {
         _selectedCondition = widget.card!.calidad;
       }
+
+      _cardId = widget.card!.codigo;
     }
   }
 
@@ -66,14 +74,45 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
     super.dispose();
   }
 
+  // Método para seleccionar imagen
+  void _selectImage() {
+    // TODO: Implementar image_picker para seleccionar imagen de galería o cámara
+    // Por ahora solo cambiamos a la imagen por defecto como placeholder
+    setState(() {
+      _selectedImage = "assets/images/underground_sea.jpg";
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Función de selección de imagen pendiente")),
+    );
+  }
+
   // Simulación de guardar
   void _saveCard() {
     // ejecutamos la validacion de todos los campos del formulario
     if (_formKey.currentState!.validate()) {
+      late String msg;
       // determinamos el mensaje segun si estamos creando o editando
-      final String msg = widget.card == null
-          ? "Carta creada"
-          : "Carta actualizada";
+      if (widget.card == null) {
+        Cardlist().addCard(
+          _nombreCtrl.text,
+          _selectedCondition,
+          _coleccionCtrl.text,
+          double.tryParse(_precioCtrl.text) ?? 0.0,
+        );
+        msg = "Carta creada";
+      } else {
+        Cardlist().updateCard(
+          model.Card(
+            _cardId,
+            _nombreCtrl.text,
+            _selectedCondition,
+            _coleccionCtrl.text,
+            double.tryParse(_precioCtrl.text) ?? 0.0,
+          ),
+        );
+        msg = "Carta actualizada";
+      }
+      Cardlist().writeInJson(pathJson);
 
       // mostramos un aviso visual al usuario
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
@@ -84,12 +123,15 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
 
   // Simulación de borrar
   void _deleteCard() {
+    Cardlist().delCard(_cardId);
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Carta eliminada"),
         backgroundColor: Colors.red,
       ),
     );
+    Cardlist().writeInJson(pathJson);
     Navigator.pop(context); // regresamos a la pantalla anterior tras borrar
   }
 
@@ -121,14 +163,73 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                     ),
                     const SizedBox(height: 20),
 
-                    // campo para el nombre con validacion de texto vacio
-                    _buildTextField(
-                      controller: _nombreCtrl,
-                      label: "Nombre de la carta",
-                      icon: Icons.title,
-                      validator: (value) =>
-                          value!.isEmpty ? "El nombre es obligatorio" : null,
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: _selectImage,
+                            child: Stack(
+                              children: [
+                                // Imagen circular
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: _selectedImage != null
+                                        ? Image.asset(
+                                            _selectedImage!,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Icon(Icons.person, size: 40),
+                                  ),
+                                ),
+                                // Círculo con icono + en la esquina inferior derecha
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      color: theme.primaryColor,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: theme.scaffoldBackgroundColor,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: const Icon(
+                                      Icons.add,
+                                      size: 14,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        Expanded(
+                          child: _buildTextField(
+                            controller: _nombreCtrl,
+                            label: "Nombre de la carta",
+                            icon: Icons.title,
+                            validator: (value) => value!.isEmpty
+                                ? "El nombre es obligatorio"
+                                : null,
+                          ),
+                        ),
+                      ],
                     ),
+
+                    // campo para el nombre con validacion de texto vacio
                     const SizedBox(height: 15),
 
                     // campo para el set o coleccion
