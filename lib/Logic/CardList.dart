@@ -30,8 +30,17 @@ class Cardlist {
 
   // Función para añadir una nueva carta a la lista.
   // Incremento el contador antes de pasarlo para generar el nuevo código.
-  addCard(nombre, calidad, coleccion, precio) {
-    cards.add(Card(++contador, nombre, calidad, coleccion, precio));
+  addCard(nombre, calidad, coleccion, precio, imagenPath) {
+    cards.add(
+      Card(
+        codigo: ++contador,
+        nombre: nombre,
+        calidad: calidad,
+        coleccion: coleccion,
+        precio: precio,
+        imagenPath: imagenPath,
+      ),
+    );
   }
 
   // Función para eliminar una carta por su código.
@@ -93,6 +102,7 @@ class Cardlist {
               "calidad": card.calidad,
               "coleccion": card.coleccion,
               "precio": card.precio,
+              "imagenPath": card.imagenPath,
             },
           )
           .toList();
@@ -126,11 +136,12 @@ class Cardlist {
     for (Map<String, dynamic> dato in datos) {
       cards.add(
         Card(
-          dato['codigo'],
-          dato['nombre'],
-          dato['calidad'],
-          dato['coleccion'],
-          dato['precio'],
+          codigo: dato['codigo'],
+          nombre: dato['nombre'],
+          calidad: dato['calidad'],
+          coleccion: dato['coleccion'],
+          precio: dato['precio'],
+          imagenPath: dato['imagenPath'],
         ),
       );
     }

@@ -1,11 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 // Importamos tu modelo con un alias para evitar conflictos con el Widget Card
 // se usa el alias model para diferenciar claramente el objeto de datos del widget visual
 import 'package:gestor_cartas/Logic/Card.dart' as model;
 import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/constants.dart';
+import 'package:gestor_cartas/widgets/CardImage.dart';
 
 class AddOrUpdatePage extends StatefulWidget {
   final model.Card? card; // Recibe la carta o null
@@ -54,6 +53,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
       _nombreCtrl.text = widget.card!.nombre;
       _coleccionCtrl.text = widget.card!.coleccion;
       _precioCtrl.text = widget.card!.precio.toString();
+      _selectedImage = widget.card!.imagenPath;
 
       // verificamos que la calidad de la carta este en nuestra lista permitida
       if (_conditions.contains(widget.card!.calidad)) {
@@ -82,7 +82,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
       _selectedImage = "assets/images/underground_sea.jpg";
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Función de selección de imagen pendiente")),
+      const SnackBar(content: Text("Funcion de seleccion de imagen pendiente")),
     );
   }
 
@@ -98,16 +98,18 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
           _selectedCondition,
           _coleccionCtrl.text,
           double.tryParse(_precioCtrl.text) ?? 0.0,
+          _selectedImage ?? "",
         );
         msg = "Carta creada";
       } else {
         Cardlist().updateCard(
           model.Card(
-            _cardId,
-            _nombreCtrl.text,
-            _selectedCondition,
-            _coleccionCtrl.text,
-            double.tryParse(_precioCtrl.text) ?? 0.0,
+            codigo: _cardId,
+            nombre: _nombreCtrl.text,
+            calidad: _selectedCondition,
+            coleccion: _coleccionCtrl.text,
+            precio: double.tryParse(_precioCtrl.text) ?? 0.0,
+            imagenPath: _selectedImage ?? "",
           ),
         );
         msg = "Carta actualizada";
@@ -172,22 +174,12 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                             child: Stack(
                               children: [
                                 // Imagen circular
-                                ClipRRect(
+                                CardImage(
+                                  imagePath: _selectedImage,
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
                                   borderRadius: BorderRadius.circular(30),
-                                  child: Container(
-                                    width: 60,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: _selectedImage != null
-                                        ? Image.asset(
-                                            _selectedImage!,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Icon(Icons.person, size: 40),
-                                  ),
                                 ),
                                 // Círculo con icono + en la esquina inferior derecha
                                 Positioned(

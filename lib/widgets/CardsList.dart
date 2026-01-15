@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/Pages/AddOrUpdatePage.dart';
 import 'package:gestor_cartas/widgets/ConditionChip.dart';
+import 'package:gestor_cartas/widgets/CardImage.dart';
 
 // Este widget se encarga de dibujar la lista de cartas de forma individual
 class CardsList extends StatefulWidget {
@@ -52,15 +53,12 @@ class _CardsListState extends State<CardsList> {
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
           child: ListTile(
-            leading: ClipRRect(
-              // ClipRRect redondea la imagen
+            leading: CardImage(
+              imagePath: card.imagenPath,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
               borderRadius: BorderRadius.circular(200),
-              child: Image.asset(
-                "assets/images/underground_sea.jpg",
-                fit: BoxFit.cover,
-                width: 50,
-                height: 50,
-              ),
             ),
             title: Row(
               children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/widgets/ConditionChip.dart';
+import 'package:gestor_cartas/widgets/CardImage.dart';
 
 // Este widget muestra una cuadricula con las 4 cartas mas valiosas de la coleccion
 class ColeccionTopCards extends StatelessWidget {
@@ -47,12 +48,11 @@ class ColeccionTopCards extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Mantiene la proporcion de la imagen sin importar el tamaño de la pantalla
-              AspectRatio(
-                aspectRatio: 1.6,
-                child: Image.asset(
-                  "assets/images/underground_sea.jpg",
-                  fit: BoxFit.cover,
-                ),
+              CardImage(
+                imagePath: orderedList[index].imagenPath,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
               ),
 
               const SizedBox(height: 10),

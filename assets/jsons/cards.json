@@ -1,1 +1,74 @@
-[{"codigo":5,"nombre":"Black Lotus","calidad":"Poor","coleccion":"Alpha","precio":12500.0},{"codigo":1,"nombre":"Underground Sea","calidad":"Excelent","coleccion":"Revised","precio":600.0},{"codigo":4,"nombre":"Volcanic Island","calidad":"Excelent","coleccion":"Revised","precio":580.0},{"codigo":3,"nombre":"Mox Diamond","calidad":"Excelent","coleccion":"Portal","precio":500.0},{"codigo":2,"nombre":"Yawgmoth's Will","calidad":"Played","coleccion":"Saga de Urza","precio":90.0},{"codigo":6,"nombre":"Force of Will","calidad":"Good","coleccion":"Alliances","precio":85.0},{"codigo":8,"nombre":"actualizadodada","calidad":"Poor","coleccion":"2222","precio":222.0}]
+[
+    {
+        "codigo": 5,
+        "nombre": "Black Lotus",
+        "calidad": "Poor",
+        "coleccion": "Alpha",
+        "precio": 12500.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 1,
+        "nombre": "Underground Sea",
+        "calidad": "Excelent",
+        "coleccion": "Revised",
+        "precio": 600.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 4,
+        "nombre": "Volcanic Island",
+        "calidad": "Excelent",
+        "coleccion": "Revised",
+        "precio": 580.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 3,
+        "nombre": "Mox Diamond",
+        "calidad": "Excelent",
+        "coleccion": "Portal",
+        "precio": 500.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 8,
+        "nombre": "actualizadodadaaa",
+        "calidad": "Poor",
+        "coleccion": "2222",
+        "precio": 222.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 2,
+        "nombre": "Yawgmoth's Will",
+        "calidad": "Played",
+        "coleccion": "Saga de Urza",
+        "precio": 90.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 6,
+        "nombre": "Force of Will",
+        "calidad": "Good",
+        "coleccion": "Alliances",
+        "precio": 85.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 10,
+        "nombre": "dadad",
+        "calidad": "Near Mint",
+        "coleccion": "dadad",
+        "precio": 22.0,
+        "imagenPath": null
+    },
+    {
+        "codigo": 11,
+        "nombre": "prueba foto",
+        "calidad": "Near Mint",
+        "coleccion": "prueba",
+        "precio": 222.0,
+        "imagenPath": ""
+    }
+]

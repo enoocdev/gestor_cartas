@@ -14,15 +14,15 @@ class Card {
 
   // El precio es privado para forzar el uso del getter y setter.
   // Así controlo que nunca sea negativo.
-  double _precio;
+  late double _precio;
 
   // Constructor principal para crear una carta.
   Card({
-    this.codigo,
-    this.nombre,
+    required this.codigo,
+    required this.nombre,
     this.calidad,
-    this.coleccion,
-    this._precio,
+    required this.coleccion,
+    required double precio,
     this.imagenPath,
   }) {
     // Me aseguro de que el precio no sea negativo al crear la carta.
