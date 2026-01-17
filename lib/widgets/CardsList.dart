@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/Pages/AddOrUpdatePage.dart';

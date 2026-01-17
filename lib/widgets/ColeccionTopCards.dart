@@ -47,11 +47,10 @@ class ColeccionTopCards extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Mantiene la proporcion de la imagen sin importar el tamaño de la pantalla
               CardImage(
                 imagePath: orderedList[index].imagenPath,
-                width: double.infinity,
-                height: double.infinity,
+                width: 150,
+                height: 150,
                 fit: BoxFit.cover,
               ),
 
