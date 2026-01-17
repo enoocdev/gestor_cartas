@@ -25,7 +25,7 @@ class ColeccionTopCards extends StatelessWidget {
     // Se construye una cuadricula que se ajusta al contenido disponible
     return GridView.builder(
       shrinkWrap: true, // Importante para que no de error dentro de un scroll
-      physics: ScrollPhysics(parent: NeverScrollableScrollPhysics()),
+      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Se definen dos columnas
         crossAxisSpacing: 10, // Espacio horizontal entre tarjetas

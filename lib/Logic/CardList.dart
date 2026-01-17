@@ -8,6 +8,7 @@ import 'Card.dart';
 export 'CardList.dart';
 
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Clase que gestiona la lista completa de cartas.
 /// Se encarga de añadir, borrar, buscar y persistir los datos en JSON.
@@ -91,9 +92,13 @@ class Cardlist {
 
   // Guarda la lista de cartas actual en un fichero JSON.
   // Es una función asíncrona porque la escritura a disco puede tardar.
-  writeInJson(String path) async {
-    File file = File(path);
+  writeInJson() async {
     try {
+      // Obtengo el directorio de documentos de la app
+      final appDir = await getApplicationDocumentsDirectory();
+      final filePath = '${appDir.path}/cards.json';
+      File file = File(filePath);
+
       // Primero, convierto la lista de objetos Card a una lista de Mapas.
       List<Map<String, dynamic>> registros = cards
           .map(
@@ -112,15 +117,32 @@ class Cardlist {
       await file.writeAsString(jsonEncode(registros), mode: FileMode.write);
       return true;
     } catch (e) {
+      print("ERROR ESCRIBIENDO EL ARCHIVO: $e");
       return false;
     }
   }
 
   // Carga las cartas desde un fichero JSON.
-  readFromJson(String path) async {
+  // Primero intenta cargar desde el directorio de documentos.
+  // Si no existe, carga desde assets y lo copia al directorio de documentos.
+  readFromJson() async {
     String contenido;
     try {
-      contenido = await rootBundle.loadString(path);
+      // Obtengo el directorio de documentos de la app
+      final appDir = await getApplicationDocumentsDirectory();
+      final filePath = '${appDir.path}/cards.json';
+      File file = File(filePath);
+
+      // Verifico si ya existe el archivo en el directorio de documentos
+      if (await file.exists()) {
+        // Si existe, leo desde el archivo local
+        contenido = await file.readAsString();
+      } else {
+        // Si no existe, cargo desde assets y lo copio al directorio de documentos
+        contenido = await rootBundle.loadString('assets/jsons/cards.json');
+        // Guardo una copia en el directorio de documentos para futuras lecturas/escrituras
+        await file.writeAsString(contenido);
+      }
     } catch (e) {
       print("ERROR LEYENDO EL ARCHIVO: $e");
       return -1;

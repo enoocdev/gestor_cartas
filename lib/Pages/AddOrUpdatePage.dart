@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // se usa el alias model para diferenciar claramente el objeto de datos del widget visual
 import 'package:gestor_cartas/Logic/Card.dart' as model;
 import 'package:gestor_cartas/Logic/CardList.dart';
-import 'package:gestor_cartas/constants.dart';
 import 'package:gestor_cartas/widgets/CardImage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -142,7 +141,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
         );
         msg = "Carta actualizada";
       }
-      Cardlist().writeInJson(pathJson);
+      Cardlist().writeInJson();
 
       // mostramos un aviso visual al usuario
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
@@ -161,7 +160,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
         backgroundColor: Colors.red,
       ),
     );
-    Cardlist().writeInJson(pathJson);
+    Cardlist().writeInJson();
     Navigator.pop(context); // regresamos a la pantalla anterior tras borrar
   }
 
