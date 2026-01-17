@@ -47,11 +47,13 @@ class ColeccionTopCards extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CardImage(
-                imagePath: orderedList[index].imagenPath,
-                width: 150,
-                height: 150,
-                fit: BoxFit.cover,
+              Expanded(
+                child: CardImage(
+                  imagePath: orderedList[index].imagenPath,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
 
               const SizedBox(height: 10),

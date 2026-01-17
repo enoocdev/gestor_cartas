@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 /// Widget que muestra una imagen de carta con validaciones
-/// Si la imagen no existe o la ruta es invÃ¡lida, muestra un icono por defecto
+/// Soporta tanto assets como archivos locales
+/// Si la imagen no existe o la ruta es inválida, muestra un icono por defecto
 class CardImage extends StatelessWidget {
   final String? imagePath;
   final double width;
@@ -22,7 +25,7 @@ class CardImage extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget imageWidget;
 
-    // Si no hay imagen o estÃ¡ vacÃ­a, mostrar icono por defecto
+    // Si no hay imagen o está vacía, mostrar icono por defecto
     if (imagePath == null || imagePath!.isEmpty) {
       imageWidget = Center(
         child: Icon(
@@ -31,21 +34,42 @@ class CardImage extends StatelessWidget {
         ),
       );
     } else {
-      // Intentar cargar la imagen
-      imageWidget = Image.asset(
-        imagePath!,
-        fit: fit,
-        width: width,
-        height: height,
-        errorBuilder: (context, error, stackTrace) {
-          return Center(
-            child: Icon(
-              Icons.person,
-              size: width > height ? height * 0.6 : width * 0.6,
-            ),
-          );
-        },
-      );
+      // Detectar si es asset o archivo local
+      final isAsset = imagePath!.startsWith('assets/');
+
+      if (isAsset) {
+        // Cargar como asset
+        imageWidget = Image.asset(
+          imagePath!,
+          fit: fit,
+          width: width,
+          height: height,
+          errorBuilder: (context, error, stackTrace) {
+            return Center(
+              child: Icon(
+                Icons.person,
+                size: width > height ? height * 0.6 : width * 0.6,
+              ),
+            );
+          },
+        );
+      } else {
+        // Cargar como archivo local
+        imageWidget = Image.file(
+          File(imagePath!),
+          fit: fit,
+          width: width,
+          height: height,
+          errorBuilder: (context, error, stackTrace) {
+            return Center(
+              child: Icon(
+                Icons.person,
+                size: width > height ? height * 0.6 : width * 0.6,
+              ),
+            );
+          },
+        );
+      }
     }
 
     final container = Container(

@@ -56,6 +56,7 @@ class Cardlist {
     c.coleccion = card.coleccion;
     c.nombre = card.nombre;
     c.precio = card.precio;
+    c.imagenPath = card.imagenPath;
   }
 
   // Buscador genérico. Permite filtrar por cualquier campo que no sea nulo.

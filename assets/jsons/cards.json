@@ -13,7 +13,7 @@
         "calidad": "Excelent",
         "coleccion": "Revised",
         "precio": 600.0,
-        "imagenPath": null
+        "imagenPath": "assets/images/underground_sea.jpg"
     },
     {
         "codigo": 4,

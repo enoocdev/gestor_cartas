@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 // Importamos tu modelo con un alias para evitar conflictos con el Widget Card
 // se usa el alias model para diferenciar claramente el objeto de datos del widget visual
@@ -5,6 +7,8 @@ import 'package:gestor_cartas/Logic/Card.dart' as model;
 import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/constants.dart';
 import 'package:gestor_cartas/widgets/CardImage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AddOrUpdatePage extends StatefulWidget {
   final model.Card? card; // Recibe la carta o null
@@ -74,16 +78,40 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
     super.dispose();
   }
 
-  // Método para seleccionar imagen
-  void _selectImage() {
-    // TODO: Implementar image_picker para seleccionar imagen de galería o cámara
-    // Por ahora solo cambiamos a la imagen por defecto como placeholder
-    setState(() {
-      _selectedImage = "assets/images/underground_sea.jpg";
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Funcion de seleccion de imagen pendiente")),
-    );
+  // Método para seleccionar imagen desde la galería
+  Future<void> _selectImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+
+    if (picked == null) return; // usuario canceló
+
+    try {
+      final appDir = await getApplicationDocumentsDirectory();
+      final imagesDir = Directory('${appDir.path}/images');
+      await imagesDir.create(recursive: true);
+
+      // Mantengo la extensión original del archivo
+      final ext = picked.name.contains('.')
+          ? '.${picked.name.split('.').last}'
+          : '';
+      final fileName = 'card_${DateTime.now().millisecondsSinceEpoch}$ext';
+      final savedPath = '${imagesDir.path}/$fileName';
+
+      // Copiar imagen al directorio de la app
+      await File(picked.path).copy(savedPath);
+
+      setState(() {
+        _selectedImage = savedPath;
+      });
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Imagen guardada')));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error guardando la imagen: $e')));
+    }
   }
 
   // Simulación de guardar
