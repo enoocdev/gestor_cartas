@@ -12,8 +12,7 @@ class ColeccionTopCards extends StatelessWidget {
     // Se accede a los datos globales
     final lista = Cardlist().cards;
 
-    // .. hace que me devuelva una lista diferente y no m modifique la original
-    // Se ordena de mayor a menor precio y se toman solo los primeros 4 elementos
+    // Se genera una copia ordenada por precio de mayor a menor y se toman las 4 primeras
     List orderedList = [
       ...lista..sort((a, b) => b.precio.compareTo(a.precio)),
     ].take(4).toList();
@@ -99,7 +98,7 @@ class ColeccionTopCards extends StatelessWidget {
 
                     // Precio destacado en la parte inferior de la tarjeta
                     Text(
-                      "${orderedList[index].precio.toStringAsFixed(2)} €", // Variable: orderedList[index].precio
+                      "${orderedList[index].precio.toStringAsFixed(2)} €",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,

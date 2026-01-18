@@ -21,7 +21,7 @@ class _CardsPageState extends State<CardsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Boton circular flotante para ir a la pantalla de agregar una nueva carta
+      // Boton flotante para crear una nueva carta
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Navegamos a la pantalla de agregar carta y esperamos el resultado
@@ -29,12 +29,11 @@ class _CardsPageState extends State<CardsPage> {
             context,
             MaterialPageRoute(builder: (context) => const AddOrUpdatePage()),
           );
-          // Al volver actualizamos la lista para reflejar los cambios
+          // Al volver actualizamos la cargar lista para reflejar los cambios
           setState(() {
             _cards = [...Cardlist().cards];
           });
         },
-        // Icono de mas para indicar que se puede agregar
         child: const Icon(Icons.add),
       ),
       body: SingleChildScrollView(
@@ -48,7 +47,6 @@ class _CardsPageState extends State<CardsPage> {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  // Espacio superior
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(5, 0, 5, 15),
@@ -70,7 +68,6 @@ class _CardsPageState extends State<CardsPage> {
                           width: 240,
                           child: TextField(
                             decoration: InputDecoration(
-                              // Icono de lupa para indicar busqueda
                               icon: Icon(Icons.search),
                               hintText: "Buscar...",
                               // Lo hace mas compacto visualmente
@@ -89,7 +86,7 @@ class _CardsPageState extends State<CardsPage> {
                       ],
                     ),
                   ),
-                  // Linea divisoria para separar la busqueda de la lista
+
                   const Divider(),
                   // Se le pasa la lista filtrada al widget que dibuja las cartas
                   CardsList(cards: _cards),

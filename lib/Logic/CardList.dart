@@ -27,7 +27,7 @@ class Cardlist {
   // Constructor privado para el singleton
   Cardlist._internal();
 
-  // Aqui guardo todas las cartas en memoria
+  // Aqui guardo todas las lista de cartas
   List<Card> cards = [];
 
   // Lo uso como autoincremento para el codigo de cada carta nueva

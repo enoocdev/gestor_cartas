@@ -56,7 +56,6 @@ class _MainLayoutState extends State<MainLayout> {
 
     return Scaffold(
       appBar: AppBar(
-        // Titulo centrado en la barra superior
         title: Text("Gestor de cartas"),
         centerTitle: true,
         // Boton de cambio de tema que cambia de icono segun el brillo actual de la app
@@ -77,9 +76,7 @@ class _MainLayoutState extends State<MainLayout> {
       // Barra de navegacion inferior con dos opciones
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          // Item de inicio con icono de casa
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
-          // Item de cartas con icono de cartas
           BottomNavigationBarItem(
             icon: Icon(Symbols.playing_cards),
             label: "Cards",

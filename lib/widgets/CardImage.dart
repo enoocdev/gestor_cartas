@@ -52,7 +52,6 @@ class CardImage extends StatelessWidget {
           fit: fit,
           width: width,
           height: height,
-          // Si hay error al cargar mostramos el icono por defecto
           errorBuilder: (context, error, stackTrace) {
             return Center(
               child: Icon(
@@ -69,7 +68,6 @@ class CardImage extends StatelessWidget {
           fit: fit,
           width: width,
           height: height,
-          // Si hay error al cargar mostramos el icono por defecto
           errorBuilder: (context, error, stackTrace) {
             return Center(
               child: Icon(
