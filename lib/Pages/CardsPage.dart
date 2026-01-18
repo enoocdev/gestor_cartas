@@ -3,8 +3,7 @@ import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/Pages/AddOrUpdatePage.dart';
 import 'package:gestor_cartas/widgets/CardsList.dart';
 
-// Esta pantalla se encarga de mostrar todas las cartas y permitir la busqueda
-// Es un StatefulWidget porque maneja el estado del filtro de busqueda
+// pantalla donde muestro todas las cartas y el buscador
 class CardsPage extends StatefulWidget {
   const CardsPage({super.key});
 
@@ -13,23 +12,23 @@ class CardsPage extends StatefulWidget {
 }
 
 class _CardsPageState extends State<CardsPage> {
-  // Referencia a la logica centralizada de las cartas usando el singleton
+  // cargo la lista global de cartas
   final Cardlist _cardlist = Cardlist();
-  // Variable para guardar la lista que se va a mostrar segun el filtro aplicado
+  // lista auxiliar que uso para filtrar
   late List _cards = _cardlist.cards;
 
+  // pinto la pantalla con el boton flotante y la lista
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Boton flotante para crear una nueva carta
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Navegamos a la pantalla de agregar carta y esperamos el resultado
+          // voy a la pantalla de crear y espero a que vuelva
           await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddOrUpdatePage()),
           );
-          // Al volver actualizamos la cargar lista para reflejar los cambios
+          // cuando vuelve actualizo la lista por si hubo cambios
           setState(() {
             _cards = [...Cardlist().cards];
           });
@@ -39,8 +38,7 @@ class _CardsPageState extends State<CardsPage> {
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
-            // Esto ajusta que cuando la pantalla se hace grande
-            // lo maximo de anchura que puede tener es de 800 pixeles
+            // limito el ancho para que no se vea mal en pantallas grandes
             constraints: const BoxConstraints(maxWidth: 800),
 
             child: Padding(
@@ -52,7 +50,6 @@ class _CardsPageState extends State<CardsPage> {
                     padding: const EdgeInsets.fromLTRB(5, 0, 5, 15),
                     child: Row(
                       children: [
-                        // Titulo de la seccion alineado a la izquierda
                         Expanded(
                           child: Text(
                             "Cartas",
@@ -63,21 +60,18 @@ class _CardsPageState extends State<CardsPage> {
                           ),
                         ),
 
-                        // Contenedor con ancho fijo para el buscador
                         SizedBox(
                           width: 240,
                           child: TextField(
                             decoration: InputDecoration(
                               icon: Icon(Icons.search),
                               hintText: "Buscar...",
-                              // Lo hace mas compacto visualmente
                               isDense: true,
                               contentPadding: EdgeInsets.all(8),
                             ),
-                            // Cada vez que el usuario escribe se filtra la lista
+                            // filtro la lista cada vez que escribo algo
                             onChanged: (text) {
                               setState(() {
-                                // Se llama al buscador de la logica y se refresca la vista
                                 _cards = _cardlist.searchCard(nombre: text);
                               });
                             },
@@ -86,9 +80,8 @@ class _CardsPageState extends State<CardsPage> {
                       ],
                     ),
                   ),
-
                   const Divider(),
-                  // Se le pasa la lista filtrada al widget que dibuja las cartas
+                  // paso la lista filtrada al widget que las pinta
                   CardsList(cards: _cards),
                 ],
               ),
