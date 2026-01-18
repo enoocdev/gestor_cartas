@@ -4,10 +4,10 @@ import 'package:gestor_cartas/Pages/CardsPage.dart';
 import 'package:gestor_cartas/Pages/MainPage.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-/// Widget que define la estructura principal de la interfaz
-/// Utiliza un StatefulWidget porque maneja el estado de la navegación y la carga de datos
+// Widget que define la estructura principal de la interfaz
+// Utiliza un StatefulWidget porque maneja el estado de la navegacion y la carga de datos
 class MainLayout extends StatefulWidget {
-  // Recibe la función para cambiar el tema desde
+  // Recibe la funcion para cambiar el tema desde el widget padre
   final Function changeTheme;
   const MainLayout({super.key, required this.changeTheme});
 
@@ -16,23 +16,23 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  // Instancia de la gestion de las cartas
+  // Instancia de la gestion de las cartas usando el singleton
   final Cardlist _cardlist = Cardlist();
 
-  // Pagina actual
+  // Indice de la pagina actual seleccionada en la navegacion
   int _selectedIndex = 0;
 
   // Estado para saber si se estan cargando los datos
   bool _loading = false;
 
-  /// Metodo asincrono para cargar las cartas desde el JSON
-  /// Gestiona el estado de carga para mostrar un indicador visual mientras se lee el archivo
+  // Metodo asincrono para cargar las cartas desde el JSON
+  // Gestiona el estado de carga para mostrar un indicador visual mientras se lee el archivo
   loadCards() async {
     setState(() {
       _loading = true;
     });
 
-    // Llamada al método de la lógica para leer los datos del JSON
+    // Llamada al metodo de la logica para leer los datos del JSON
     await _cardlist.readFromJson();
 
     setState(() {
@@ -42,7 +42,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   void initState() {
-    // Se ejecuta una sola vez al insertar el widget
+    // Se ejecuta una sola vez al insertar el widget en el arbol
     super.initState();
 
     // Se ejecuta la carga de los datos
@@ -56,9 +56,10 @@ class _MainLayoutState extends State<MainLayout> {
 
     return Scaffold(
       appBar: AppBar(
+        // Titulo centrado en la barra superior
         title: Text("Gestor de cartas"),
         centerTitle: true,
-        // Boton de cambio de tema cambia de icono segun el brillo actual de la app.
+        // Boton de cambio de tema que cambia de icono segun el brillo actual de la app
         leading: Theme.of(context).brightness == Brightness.dark
             ? IconButton(
                 onPressed: () => widget.changeTheme(),
@@ -69,25 +70,30 @@ class _MainLayoutState extends State<MainLayout> {
                 icon: Icon(Icons.light_mode),
               ),
       ),
-      // Si esta cargando muestra un círculo de progreso. Si no, muestra la pagina seleccionada
+      // Si esta cargando muestra un circulo de progreso si no muestra la pagina seleccionada
       body: _loading
           ? Center(child: CircularProgressIndicator())
           : pages[_selectedIndex],
+      // Barra de navegacion inferior con dos opciones
       bottomNavigationBar: BottomNavigationBar(
         items: [
+          // Item de inicio con icono de casa
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
+          // Item de cartas con icono de cartas
           BottomNavigationBarItem(
             icon: Icon(Symbols.playing_cards),
             label: "Cards",
           ),
         ],
+        // Indice del item seleccionado actualmente
         currentIndex: _selectedIndex,
-        // Al pulsar un item, actualiza el índice y redibuja la interfaz
+        // Al pulsar un item actualiza el indice y redibuja la interfaz
         onTap: (value) {
           setState(() {
             _selectedIndex = value;
           });
         },
+        // Oculta las etiquetas de los items no seleccionados
         showUnselectedLabels: false,
       ),
     );

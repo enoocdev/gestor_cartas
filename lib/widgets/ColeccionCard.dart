@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../Logic/CardList.dart';
 
 // Este widget muestra una tarjeta con el resumen economico de toda la coleccion
+// Calcula y muestra el valor total y el numero de cartas almacenadas
 class ColeccionCard extends StatelessWidget {
   const ColeccionCard({super.key});
 
@@ -22,9 +23,12 @@ class ColeccionCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Card(
-      elevation: 9, // Sombra pronunciada para darle profundidad a la tarjeta
+      // Sombra pronunciada para darle profundidad a la tarjeta
+      elevation: 9,
+      // Bordes redondeados de 20 pixeles
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      clipBehavior: Clip.antiAlias, // para que no se salga del card el icono
+      // Para que no se salga del card el icono decorativo
+      clipBehavior: Clip.antiAlias,
       child: Stack(
         // Se usa un stack para colocar elementos uno encima de otro
         children: [
@@ -33,8 +37,8 @@ class ColeccionCard extends StatelessWidget {
             right: -20,
             bottom: -20,
             child: Opacity(
-              opacity:
-                  0.2, // Opacidad baja para que no moleste a la lectura del texto
+              // Opacidad baja para que no moleste a la lectura del texto
+              opacity: 0.2,
               child: Icon(Icons.monetization_on_outlined, size: 140),
             ),
           ),
@@ -52,6 +56,7 @@ class ColeccionCard extends StatelessWidget {
                     // Icono de cartera con el color primario del tema
                     Icon(Icons.wallet, color: colorScheme.primary, size: 20),
                     const SizedBox(width: 8),
+                    // Texto descriptivo de la seccion
                     Text(
                       "Valor de la coleccion",
                       style: textTheme.titleMedium?.copyWith(
@@ -73,7 +78,8 @@ class ColeccionCard extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 15),
-                const Divider(), // Linea para separar el valor del conteo total
+                // Linea para separar el valor del conteo total
+                const Divider(),
                 const SizedBox(height: 10),
 
                 Row(

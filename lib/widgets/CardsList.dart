@@ -78,7 +78,7 @@ class _CardsListState extends State<CardsList> {
 
             subtitle: Row(
               children: [
-                // Texto pequeño para identificar a que coleccion pertenece la carta
+                // Texto pequeno para identificar a que coleccion pertenece la carta
                 Expanded(
                   child: Text(
                     card.coleccion,
@@ -86,6 +86,7 @@ class _CardsListState extends State<CardsList> {
                   ),
                 ),
                 // Widget que muestra una etiqueta de color segun el estado de la carta
+                // Recibe directamente el valor de la enumeracion CardCondition
                 ConditionChip(condition: card.calidad),
               ],
             ),

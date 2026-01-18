@@ -1,16 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-// Importamos tu modelo con un alias para evitar conflictos con el Widget Card
-// se usa el alias model para diferenciar claramente el objeto de datos del widget visual
+// Importamos el modelo con un alias para evitar conflictos con el Widget Card
+// Se usa el alias model para diferenciar claramente el objeto de datos del widget visual
 import 'package:gestor_cartas/Logic/Card.dart' as model;
+// Importamos la enumeracion de condiciones de las cartas
+import 'package:gestor_cartas/Logic/CardCondition.dart';
 import 'package:gestor_cartas/Logic/CardList.dart';
 import 'package:gestor_cartas/widgets/CardImage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+// Pantalla que permite agregar una nueva carta o editar una existente
+// Es un StatefulWidget porque maneja el estado del formulario
 class AddOrUpdatePage extends StatefulWidget {
-  final model.Card? card; // Recibe la carta o null
+  // Recibe la carta a editar o null si es una carta nueva
+  final model.Card? card;
 
   const AddOrUpdatePage({super.key, this.card});
 
@@ -20,48 +25,36 @@ class AddOrUpdatePage extends StatefulWidget {
 
 class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
   // Clave para validar el formulario
-  // sirve para comprobar que todos los campos cumplen las reglas antes de guardar
+  // Sirve para comprobar que todos los campos cumplen las reglas antes de guardar
   final _formKey = GlobalKey<FormState>();
 
   // Controladores para los campos de texto
-  // permiten leer y escribir texto dentro de los inputs
+  // Permiten leer y escribir texto dentro de los inputs
   final TextEditingController _nombreCtrl = TextEditingController();
   final TextEditingController _coleccionCtrl = TextEditingController();
   final TextEditingController _precioCtrl = TextEditingController();
   final TextEditingController _imagenCtrl = TextEditingController();
+  // Identificador de la carta para cuando estamos editando
   int _cardId = 0;
-  // Variable para el selector de estado
-  String? _selectedCondition;
+  // Variable para el selector de estado usando la enumeracion
+  CardCondition? _selectedCondition;
   // Variable para la imagen seleccionada
   String? _selectedImage;
-
-  // Lista de estados
-  final List<String> _conditions = [
-    'Mint',
-    'Near Mint',
-    'Excelent',
-    'Good',
-    'Light Played',
-    'Played',
-    'Poor',
-  ];
 
   @override
   void initState() {
     super.initState();
 
-    // si la carta existe significa que estamos en modo edicion
+    // Si la carta existe significa que estamos en modo edicion
     if (widget.card != null) {
-      // cargamos los datos de la carta en los controladores para que aparezcan en pantalla
+      // Cargamos los datos de la carta en los controladores para que aparezcan en pantalla
       _nombreCtrl.text = widget.card!.nombre;
       _coleccionCtrl.text = widget.card!.coleccion;
       _precioCtrl.text = widget.card!.precio.toString();
       _selectedImage = widget.card!.imagenPath;
 
-      // verificamos que la calidad de la carta este en nuestra lista permitida
-      if (_conditions.contains(widget.card!.calidad)) {
-        _selectedCondition = widget.card!.calidad;
-      }
+      // Asignamos directamente la calidad de la carta que ya es un CardCondition
+      _selectedCondition = widget.card!.calidad;
 
       _cardId = widget.card!.codigo;
     }
@@ -113,13 +106,14 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
     }
   }
 
-  // Simulación de guardar
+  // Metodo para guardar la carta en la lista
   void _saveCard() {
-    // ejecutamos la validacion de todos los campos del formulario
+    // Ejecutamos la validacion de todos los campos del formulario
     if (_formKey.currentState!.validate()) {
       late String msg;
-      // determinamos el mensaje segun si estamos creando o editando
+      // Determinamos el mensaje segun si estamos creando o editando
       if (widget.card == null) {
+        // Creamos una nueva carta pasando la condicion seleccionada
         Cardlist().addCard(
           _nombreCtrl.text,
           _selectedCondition,
@@ -129,6 +123,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
         );
         msg = "Carta creada";
       } else {
+        // Actualizamos la carta existente con los nuevos datos
         Cardlist().updateCard(
           model.Card(
             codigo: _cardId,
@@ -141,27 +136,33 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
         );
         msg = "Carta actualizada";
       }
+      // Guardamos los cambios en el archivo JSON
       Cardlist().writeInJson();
 
-      // mostramos un aviso visual al usuario
+      // Mostramos un aviso visual al usuario
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
-      Navigator.pop(context); // Volver atrás
+      // Volver a la pantalla anterior
+      Navigator.pop(context);
     }
   }
 
-  // Simulación de borrar
+  // Metodo para eliminar la carta de la lista
   void _deleteCard() {
+    // Eliminamos la carta por su identificador
     Cardlist().delCard(_cardId);
 
+    // Mostramos mensaje de confirmacion con fondo rojo
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Carta eliminada"),
         backgroundColor: Colors.red,
       ),
     );
+    // Guardamos los cambios en el archivo JSON
     Cardlist().writeInJson();
-    Navigator.pop(context); // regresamos a la pantalla anterior tras borrar
+    // Regresamos a la pantalla anterior tras borrar
+    Navigator.pop(context);
   }
 
   @override
@@ -283,21 +284,24 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                         ),
                         const SizedBox(width: 15),
 
-                        // selector desplegable para la calidad de la carta
+                        // Selector desplegable para la calidad de la carta
+                        // Usa los valores de la enumeracion CardCondition
                         Expanded(
                           flex: 2,
-                          child: DropdownButtonFormField<String>(
-                            initialValue:
-                                _selectedCondition, // estado iniical del selector
+                          child: DropdownButtonFormField<CardCondition>(
+                            initialValue: _selectedCondition,
                             decoration: _inputDecoration(
-                              "Condición",
+                              "Condicion",
                               Icons.star,
                             ),
-                            dropdownColor: const Color(0xFF2B2B2B),
-                            items: _conditions.map((String condition) {
-                              return DropdownMenuItem<String>(
+                            // Generamos los items a partir de todos los valores de la enumeracion
+                            items: CardCondition.values.map((
+                              CardCondition condition,
+                            ) {
+                              return DropdownMenuItem<CardCondition>(
                                 value: condition,
-                                child: Text(condition),
+                                // Mostramos el nombre legible de la condicion
+                                child: Text(condition.displayName),
                               );
                             }).toList(),
                             onChanged: (newValue) {

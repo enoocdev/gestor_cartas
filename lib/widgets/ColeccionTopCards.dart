@@ -87,7 +87,8 @@ class ColeccionTopCards extends StatelessWidget {
                           ),
                         ),
 
-                        // Reutiliza el chip de condicion para mostrar la calidad
+                        // Reutiliza el chip de condicion para mostrar la calidad de la carta
+                        // Ahora recibe directamente el valor de la enumeracion CardCondition
                         ConditionChip(condition: orderedList[index].calidad),
                       ],
                     ),
