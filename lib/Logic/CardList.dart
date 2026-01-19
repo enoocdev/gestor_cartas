@@ -124,7 +124,6 @@ class Cardlist {
       await file.writeAsString(jsonEncode(registros), mode: FileMode.write);
       return true;
     } catch (e) {
-      print("ERROR ESCRIBIENDO EL ARCHIVO: $e");
       return false;
     }
   }
@@ -151,7 +150,6 @@ class Cardlist {
         await file.writeAsString(contenido);
       }
     } catch (e) {
-      print("ERROR LEYENDO EL ARCHIVO: $e");
       return -1;
     }
 
