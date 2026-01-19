@@ -154,7 +154,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? "editar carta" : "nueva carta")),
+      appBar: AppBar(title: Text(isEditing ? "Editar carta" : "Nueva carta")),
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
@@ -167,7 +167,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      isEditing ? "detalles de la carta" : "rellena los datos",
+                      isEditing ? "Detalles de la carta" : "Rellena los datos",
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -218,10 +218,10 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                         Expanded(
                           child: _buildTextField(
                             controller: _nombreCtrl,
-                            label: "nombre de la carta",
+                            label: "Nombre de la carta",
                             icon: Icons.title,
                             validator: (value) => value!.isEmpty
-                                ? "el nombre es obligatorio"
+                                ? "El nombre es obligatorio"
                                 : null,
                           ),
                         ),
@@ -294,7 +294,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                       onPressed: _saveCard,
                       icon: Icon(isEditing ? Icons.save : Icons.add),
                       label: Text(
-                        isEditing ? "actualizar carta" : "crear carta",
+                        isEditing ? "Actualizar carta" : "Crear carta",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -308,7 +308,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                       OutlinedButton.icon(
                         onPressed: _deleteCard,
                         icon: const Icon(Icons.delete),
-                        label: const Text("eliminar carta"),
+                        label: const Text("Eliminar carta"),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           foregroundColor: Colors.redAccent,
