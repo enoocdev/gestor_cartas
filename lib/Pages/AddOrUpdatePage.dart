@@ -232,10 +232,10 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
 
                     _buildTextField(
                       controller: _coleccionCtrl,
-                      label: "coleccion set",
+                      label: "Coleccion set",
                       icon: Icons.layers,
                       validator: (value) =>
-                          value!.isEmpty ? "la coleccion es obligatoria" : null,
+                          value!.isEmpty ? "La coleccion es obligatoria" : null,
                     ),
                     const SizedBox(height: 15),
 
@@ -246,11 +246,11 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                           flex: 1,
                           child: _buildTextField(
                             controller: _precioCtrl,
-                            label: "precio",
+                            label: "Precio",
                             icon: Icons.euro,
                             isNumber: true,
                             validator: (value) {
-                              if (value!.isEmpty) return "pon precio";
+                              if (value!.isEmpty) return "Pon precio";
                               if (double.tryParse(value) == null) {
                                 return "numero invalido";
                               }
@@ -265,7 +265,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                           child: DropdownButtonFormField<CardCondition>(
                             initialValue: _selectedCondition,
                             decoration: _inputDecoration(
-                              "condicion",
+                              "Condicion",
                               Icons.star,
                             ),
                             items: CardCondition.values.map((
@@ -282,7 +282,7 @@ class _AddOrUpdatePageState extends State<AddOrUpdatePage> {
                               });
                             },
                             validator: (value) =>
-                                value == null ? "elige estado" : null,
+                                value == null ? "Elige estado" : null,
                           ),
                         ),
                       ],
